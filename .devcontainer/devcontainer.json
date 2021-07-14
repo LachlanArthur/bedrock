@@ -32,6 +32,7 @@
 
 	"forwardPorts": [80, 3306],
 
+	"onCreateCommand": "cp ./.devcontainer/devcontainer.env ./.env",
 	"postCreateCommand": "composer install && sleep 5 && wp core install --url=\"${WP_HOME}\" --title=\"Site\" --admin_user=\"${ADMIN_USER}\" --admin_password=\"${ADMIN_PASSWORD}\" --admin_email=\"${ADMIN_EMAIL}\" --skip-email",
 
 	"remoteUser": "vscode",

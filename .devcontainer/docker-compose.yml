@@ -15,7 +15,6 @@ services:
         USER_GID: 1000
     volumes:
       - ..:/srv/www/site/current
-      - ./devcontainer.env:/srv/www/site/current/.env
     env_file: ./devcontainer.env
     user: vscode
     ports:
