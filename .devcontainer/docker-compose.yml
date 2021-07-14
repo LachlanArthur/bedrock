@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: "8.0"
+        INSTALL_NODE: "true"
+        NODE_VERSION: "lts/*"
+        # On Linux, you may need to update USER_UID and USER_GID below if your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+    volumes:
+      - ..:/srv/www/site/current
+      - ./devcontainer.env:/srv/www/site/current/.env
+    env_file: ./devcontainer.env
+    user: vscode
+    ports:
+      - 80
+      - 3306
+
+  nginx:
+    image: nginx:1.21
+    volumes:
+      - ..:/srv/www/site/current
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    network_mode: service:app
+
+  db:
+    image: mariadb:10.6
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    env_file: ./devcontainer.env
+    network_mode: service:app
+
+volumes:
+  mariadb-data:

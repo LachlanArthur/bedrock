@@ -1,0 +1,38 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/php-mariadb
+// Update the VARIANT arg in docker-compose.yml to pick a PHP version: 7, 7.3, 7.4
+{
+	"name": "Roots Bedrock",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/srv/www/site/current",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"php.validate.executablePath": "/usr/local/bin/php",
+		"sqltools.connections": [ {
+			"name": "Site DB",
+			"driver": "MariaDB",
+			"server": "127.0.0.1",
+			"port": 3306,
+			"database": "${MYSQL_DATABASE}",
+			"username": "${MYSQL_USER}",
+			"password": "${MYSQL_PASSWORD}",
+			"previewLimit": 50,
+		} ],
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"felixfbecker.php-debug",
+		"bmewburn.vscode-intelephense-client",
+		"mtxr.sqltools",
+		"mtxr.sqltools-driver-mysql",
+	],
+
+	"forwardPorts": [80, 3306],
+
+	"postCreateCommand": "composer install && sleep 5 && wp core install --url=\"${WP_HOME}\" --title=\"Site\" --admin_user=\"${ADMIN_USER}\" --admin_password=\"${ADMIN_PASSWORD}\" --admin_email=\"${ADMIN_EMAIL}\" --skip-email",
+
+	"remoteUser": "vscode",
+}
