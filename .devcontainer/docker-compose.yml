@@ -15,7 +15,6 @@ services:
         USER_GID: 1000
     volumes:
       - ..:/srv/www/site/current
-    env_file: ./devcontainer.env
     user: vscode
     ports:
       - 80
@@ -35,7 +34,11 @@ services:
     restart: unless-stopped
     volumes:
       - mariadb-data:/var/lib/mysql
-    env_file: ./devcontainer.env
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: site
+      MYSQL_USER: wp
+      MYSQL_PASSWORD: wp
     network_mode: service:app
 
 volumes:
